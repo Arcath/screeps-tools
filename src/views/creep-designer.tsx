@@ -295,6 +295,9 @@ export class CreepDesigner extends React.Component{
 
 const Creep = ({body}: {body: {[part: string]: number}}) => (
   <svg width="200" height="200">
+    {/* TOUGH */}
+    <circle cx={100} cy={100} r={65} fill="#525252" opacity={body.tough > 0 ? body.tough / 50 : 0 } />
+
     <circle cx={100} cy={100} r={60} fill="#222" />
 
     {/* RANGED_ATTACK */}
@@ -346,7 +349,7 @@ const Creep = ({body}: {body: {[part: string]: number}}) => (
     
 
     <circle cx={100} cy={100} r={50} fill="#555" />
-    <circle cx={100} cy={100} r={body.carry} fill="#ffe56d" />    
+    <circle cx={100} cy={100} r={body.carry} fill="#ffe56d" />
   </svg>
 )
 
