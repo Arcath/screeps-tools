@@ -288,6 +288,28 @@ export class CreepDesigner extends React.Component{
             </tr>
           </tbody>
         </table>
+        <b>Creep Functions</b>
+        <ul className="creepFunctions">
+          <li className={this.state.body.attack > 0 ? 'yes' : 'no'}>attack</li>
+          <li className={this.state.body.claim > 0 ? 'yes' : 'no'}>attackController</li>
+          <li className={(this.state.body.work > 0 && this.state.body.carry > 0) ? 'yes' : 'no'}>build</li>
+          <li className={this.state.body.claim > 0 ? 'yes' : 'no'}>claimController</li>
+          <li className={this.state.body.work > 0 ? 'yes' : 'no'}>dismantle</li>
+          <li className={this.state.body.carry > 0 ? 'yes' : 'no'}>drop</li>
+          <li className={this.state.body.carry >= 20 ? 'yes' : 'no'}>generateSafeMode</li>
+          <li className={this.state.body.work > 0 ? 'yes' : 'no'}>harvest</li>
+          <li className={this.state.body.heal > 0 ? 'yes' : 'no'}>heal</li>
+          <li className={this.state.body.move > 0 ? 'yes' : 'no'}>move</li>
+          <li className={this.state.body.carry > 0 ? 'yes' : 'no'}>pickup</li>
+          <li className={this.state.body.ranged_attack > 0 ? 'yes' : 'no'}>rangedAttack</li>
+          <li className={this.state.body.heal > 0 ? 'yes' : 'no'}>rangedHeal</li>
+          <li className={this.state.body.ranged_attack > 0 ? 'yes' : 'no'}>rangedMassAttack</li>
+          <li className={(this.state.body.work > 0 && this.state.body.carry > 0) ? 'yes' : 'no'}>repair</li>
+          <li className={this.state.body.claim > 0 ? 'yes' : 'no'}>reserveController</li>
+          <li className={this.state.body.carry > 0 ? 'yes' : 'no'}>transfer</li>
+          <li className={(this.state.body.work > 0 && this.state.body.carry > 0) ? 'yes' : 'no'}>upgradeController</li>
+          <li className={this.state.body.carry > 0 ? 'yes' : 'no'}>withdraw</li>
+        </ul>
       </div>
     </div>
   }
