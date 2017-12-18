@@ -54,6 +54,25 @@ export class CreepDesigner extends React.Component{
         carry: 0
       }
     }
+
+    let params = location.href.split('?')[1]
+    let searchParams = new URLSearchParams(params)
+
+    if(searchParams.get('share')){
+      let body = atob(searchParams.get('share')!)
+    
+      Object.keys(BODYPARTS).forEach((part) => {
+        let regex = new RegExp(BODYPARTS[part], 'g')
+
+        console.dir(regex)
+
+        let matches = body.match(regex)
+        let creepBody = this.state.body
+
+        creepBody[part] = matches !== null ? matches.length : 0
+        this.setState({body: creepBody})
+      })
+    }
   }
 
   remove(part: string){
@@ -115,6 +134,10 @@ export class CreepDesigner extends React.Component{
     return body.slice(0, -1) + ']'
   }
 
+  shareLink(){
+    return "https://screeps.arcath.net/creep-designer/?share=" + btoa(this.body())
+  }
+
   render(){
     return <div className="creep-designer">
       <div className="panel">
@@ -149,6 +172,7 @@ export class CreepDesigner extends React.Component{
         </table>
         <Creep body={this.state.body} />
         <textarea value={this.body()}></textarea>
+        <a href={this.shareLink()}>Shareable Link</a>
       </div>
       <div className="panel">
         <table className="stats">
@@ -338,7 +362,6 @@ function bodyPartWedge(startX: number, startY: number, startAngle: number, endAn
 
   let largeArc = 0
   let travel = startAngle - endAngle
-  console.dir(travel)
 
   if(travel < -180){
     largeArc = 1

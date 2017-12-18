@@ -1,6 +1,14 @@
 html {
   height: 100%;
 }
+a {
+  color: #7986cb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+a:hover {
+  color: #FF9800;
+}
 body {
   margin: 0px;
   padding: 0px;
