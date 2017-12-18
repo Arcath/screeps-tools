@@ -123,9 +123,17 @@ body {
 }
 .buildingPlanner .controls .brushes li {
   border: 1px solid #ccc;
+  padding: 5px;
 }
 .buildingPlanner .controls .brushes li img {
   width: 20px;
+}
+.buildingPlanner .controls .brushes li.active {
+  border-color: #ffe56d;
+}
+.buildingPlanner .controls textarea {
+  width: 100%;
+  height: 100px;
 }
 .buildingPlanner .map {
   width: 1000px;

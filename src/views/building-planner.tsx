@@ -240,7 +240,7 @@ export class BuildingPlanner extends React.Component{
         </p>
         <ul className="brushes">
           {Object.keys(STRUCTURES).map((key) => {
-            return <li onClick={() => this.setState({brush: key})}>
+            return <li onClick={() => this.setState({brush: key})} className={this.state.brush === key ? 'active' : ''}>
               <img src={'/img/screeps/' + key + '.png'} /> {STRUCTURES[key]} {this.state.structures[key] ? this.state.structures[key].length : 0}/{CONTROLLER_STRUCTURES[key][this.state.rcl]}
             </li>
           })}
