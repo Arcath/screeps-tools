@@ -135,7 +135,7 @@ export class BuildingPlanner extends React.Component{
           }
         }
 
-        component.setState({terrain: terrainMap})
+        component.setState({terrain: terrainMap, room: values.room, shard: values.shard})
       }
     })
   }
@@ -199,6 +199,84 @@ export class BuildingPlanner extends React.Component{
     this.setState({rcl: e.target.value})
   }
 
+  import(e: any){
+    let component = this
+    let json = JSON.parse(e.target.value)
+    
+    jQuery.ajax({
+      url: '/api/terrain/' + json.shard + '/' + json.name,
+      dataType: 'json',
+      success: (data: any) => {
+        let terrain = data.terrain[0].terrain
+        let terrainMap: TerrainMap = {}
+        for (var y = 0; y < 50; y++) {
+          terrainMap[y] = {}
+          for (var x = 0; x < 50; x++) {
+            let code = terrain.charAt(y * 50 + x)
+            terrainMap[y][x] = code
+          }
+        }
+
+        let structures: {
+          [structure: string]: Array<{
+            x: number
+            y: number
+          }>
+        } = {}
+
+        Object.keys(json.buildings).forEach((structure) => {
+          structures[structure] = json.buildings[structure].pos
+        })
+
+        component.setState({terrain: terrainMap, room: json.name, shard: json.shard, rcl: json.rcl, structures: structures})
+      }
+    })
+  }
+
+  getStructure(x: number, y: number){
+    let structure = ''
+
+    Object.keys(this.state.structures).forEach((structureName) => {
+      if(structureName != 'road' && structureName != 'rampart'){
+        this.state.structures[structureName].forEach((pos) => {
+          if(pos.x === x && pos.y === y){
+            structure = structureName
+          }
+        })
+      }
+    })
+
+    return structure
+  }
+
+  isRoad(x: number, y: number){
+    let road = false
+
+    if(this.state.structures.road){
+      this.state.structures.road.forEach((pos) => {
+        if(pos.x === x && pos.y === y){
+          road = true
+        }
+      })
+    }
+
+    return road
+  }
+
+  isRampart(x: number, y: number){
+    let road = false
+
+    if(this.state.structures.rampart){
+      this.state.structures.rampart.forEach((pos) => {
+        if(pos.x === x && pos.y === y){
+          road = true
+        }
+      })
+    }
+
+    return road
+  }
+
   render(){
     return <div className="buildingPlanner">
       <div className="map">
@@ -210,6 +288,9 @@ export class BuildingPlanner extends React.Component{
                 y={j}
                 terrain={this.state.terrain[j][i]}
                 parent={this}
+                structure={this.getStructure(i, j)}
+                road={this.isRoad(i,j)}
+                rampart={this.isRampart(i,j)}
               />
             })}
           </div>
@@ -250,7 +331,7 @@ export class BuildingPlanner extends React.Component{
             </li>
           })}
         </ul>
-        <textarea value={this.json()}></textarea>
+        <textarea value={this.json()} id="json-data" onChange={(e) => this.import(e)}></textarea>
       </div>
     </div>
   }
@@ -261,6 +342,9 @@ interface MapCellProps{
   y: number
   terrain: number
   parent: BuildingPlanner
+  structure: string
+  road: boolean
+  rampart: boolean
 }
 
 class MapCell extends React.Component<MapCellProps>{
@@ -276,10 +360,18 @@ class MapCell extends React.Component<MapCellProps>{
 
     this.state = {
       hover: false,
-      structure: '',
-      road: false,
-      rampart: false
+      structure: this.props.structure,
+      road: this.props.road,
+      rampart: this.props.rampart
     }
+  }
+
+  componentWillReceiveProps(newProps: MapCellProps){
+    this.setState({
+      structure: newProps.structure,
+      road: newProps.road,
+      rampart: newProps.rampart
+    })
   }
 
   mouseEnter(e: any){
