@@ -80,13 +80,14 @@ body {
   background-image: url(/img/screeps/link.png);
 }
 .buildingPlanner .road {
-  background-image: url(/img/screeps/road.png);
+  background: radial-gradient(ellipse at center, #4e4e4e 0%, #4e4e4e 20%, #222 21%, #222 100%) !important;
 }
 .buildingPlanner .constructedWall {
   background-image: url(/img/screeps/constructedWall.png);
 }
 .buildingPlanner .rampart {
-  background-image: url(/img/screeps/rampart.png);
+  background-color: #314b31 !important;
+  border-color: #2d632d !important;
 }
 .buildingPlanner .tower {
   background-image: url(/img/screeps/tower.png);
@@ -116,7 +117,7 @@ body {
   background-image: url(/img/screeps/storage.png);
 }
 .buildingPlanner .controls {
-  width: 30%;
+  width: 20%;
   margin: 5%;
   float: left;
   background-color: #222;

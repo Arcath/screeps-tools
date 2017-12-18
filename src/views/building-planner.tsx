@@ -205,7 +205,12 @@ export class BuildingPlanner extends React.Component{
         {[...Array(50)].map((x: number, j) => {
           return <div className="row">
             {[...Array(50)].map((y: number, i) => {
-              return <MapCell x={i} y={j} terrain={this.state.terrain[j][i]} parent={this} />
+              return <MapCell
+                x={i}
+                y={j}
+                terrain={this.state.terrain[j][i]}
+                parent={this}
+              />
             })}
           </div>
         })}
@@ -262,6 +267,8 @@ class MapCell extends React.Component<MapCellProps>{
   state: Readonly<{
     hover: boolean
     structure: string
+    road: boolean
+    rampart: boolean
   }>
 
   constructor(props: MapCellProps){
@@ -269,7 +276,9 @@ class MapCell extends React.Component<MapCellProps>{
 
     this.state = {
       hover: false,
-      structure: ''
+      structure: '',
+      road: false,
+      rampart: false
     }
   }
 
@@ -287,6 +296,14 @@ class MapCell extends React.Component<MapCellProps>{
 
     if(this.state.structure !== ''){
       className += this.state.structure + ' '
+    }
+
+    if(this.state.road){
+      className += 'road '
+    }
+
+    if(this.state.rampart){
+      className += 'rampart '
     }
 
     if(this.props.terrain & 1){
@@ -308,17 +325,27 @@ class MapCell extends React.Component<MapCellProps>{
     }
 
     if(this.props.parent.addStructure(this.props.x, this.props.y)){
-      this.setState({structure: this.props.parent.state.brush})
+      switch(this.props.parent.state.brush){
+        case('road'):
+          this.setState({road: true})
+        break;
+        case('rampart'):
+          this.setState({rampart: true})
+        break;
+        default:
+          this.setState({structure: this.props.parent.state.brush})
+        break;
+      }
     }
   }
 
   onContextMenu(e: any){
     e.preventDefault()
 
-    if(this.state.structure !== ''){
+    if(this.state.structure !== '' || this.state.road || this.state.rampart){
       this.props.parent.removeStructure(this.props.x, this.props.y, this.state.structure)
 
-      this.setState({structure: ''})
+      this.setState({structure: '', road: false, rampart: false})
     }
   }
 
