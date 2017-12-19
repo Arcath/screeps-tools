@@ -38,6 +38,9 @@ body {
 .header a.active {
   color: #FF9800;
 }
+.header a.gh-link {
+  float: right;
+}
 .creep-designer .panel {
   width: 40%;
   margin: 5%;

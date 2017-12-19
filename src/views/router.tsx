@@ -18,6 +18,7 @@ const AppRouter = () => (
       <NavLink to='/' exact>Tools</NavLink>
       <NavLink to='/building-planner'>Building Planner</NavLink>
       <NavLink to='/creep-designer'>Creep Designer</NavLink>
+      <a href="https://github.com/Arcath/screeps-tools" className="gh-link">GitHub</a>
     </div>
     <Switch>
       <Route path='/building-planner'component={BuildingPlanner} />
