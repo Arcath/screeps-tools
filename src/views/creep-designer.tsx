@@ -59,19 +59,15 @@ export class CreepDesigner extends React.Component{
     let searchParams = new URLSearchParams(params)
 
     if(searchParams.get('share')){
-      let body = atob(searchParams.get('share')!)
-    
-      Object.keys(BODYPARTS).forEach((part) => {
-        let regex = new RegExp(BODYPARTS[part], 'g')
-
-        console.dir(regex)
-
-        let matches = body.match(regex)
-        let creepBody = this.state.body
-
-        creepBody[part] = matches !== null ? matches.length : 0
-        this.setState({body: creepBody})
+      let body = searchParams.get('share')!
+      let creepBody = this.state.body
+      let i = 0
+      body.split("#").forEach((count) => {
+        creepBody[Object.keys(BODYPARTS)[i]] = parseInt(count)
+        i += 1
       })
+
+      this.setState({body: creepBody})
     }
   }
 
@@ -135,7 +131,13 @@ export class CreepDesigner extends React.Component{
   }
 
   shareLink(){
-    return "https://screeps.arcath.net/creep-designer/?share=" + btoa(this.body())
+    let counts: number[] = []
+
+    Object.keys(BODYPARTS).forEach((part) => {
+      counts.push(this.state.body[part])
+    })
+
+    return "https://screeps.arcath.net/creep-designer/?share=" + counts.join('#')
   }
 
   render(){
