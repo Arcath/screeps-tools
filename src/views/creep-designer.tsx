@@ -23,17 +23,6 @@ const BODYPARTS: {[part: string]: string} = {
   carry: "CARRY"
 }
 
-/*const MOVE = 'move'
-const WORK = 'work'
-const CARRY = 'carry'
-const ATTACK = 'attack'
-const RANGED_ATTACK = 'ranged_attack'
-const HEAL = 'heal'
-const CLAIM = 'claim'
-const TOUGH = 'tough'
-
-const CONSTANTS = [MOVE, WORK, CARRY, ATTACK, RANGED_ATTACK, HEAL, CLAIM, TOUGH]*/
-
 export class CreepDesigner extends React.Component{
   state: Readonly<{
     body: {[part: string]: number}
@@ -140,6 +129,14 @@ export class CreepDesigner extends React.Component{
     return "https://screeps.arcath.net/creep-designer/?share=" + counts.join('#')
   }
 
+  creepLifespan(){
+    if(this.state.body.claim > 0){
+      return 500
+    }else{
+      return 1500
+    }
+  }
+
   render(){
     return <div className="creep-designer">
       <div className="panel">
@@ -185,97 +182,111 @@ export class CreepDesigner extends React.Component{
               <th>t1 Boost</th>
               <th>t2 Boost</th>
               <th>t3 Boost</th>
+              <th>Lifetime</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>Attack</td>
-              <td>{this.state.body.attack * 30}/T</td>
-              <td>{(this.state.body.attack * 30) * 2}/T</td>
-              <td>{(this.state.body.attack * 30) * 3}/T</td>
-              <td>{(this.state.body.attack * 30) * 4}/T</td>
+              <td>{(this.state.body.attack * 30).toLocaleString()}/T</td>
+              <td>{((this.state.body.attack * 30) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.attack * 30) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.attack * 30) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.attack * 30) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Build</td>
-              <td>{this.state.body.work * 5}/T</td>
-              <td>{(this.state.body.work * 5) * 1.5}/T</td>
-              <td>{(this.state.body.work * 5) * 1.8}/T</td>
-              <td>{(this.state.body.work * 5) * 2}/T</td>
+              <td>{(this.state.body.work * 5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 5) * 1.5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 5) * 1.8).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 5) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 5) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Dismantle</td>
-              <td>{this.state.body.work * 50}/T</td>
-              <td>{(this.state.body.work * 50) * 2}/T</td>
-              <td>{(this.state.body.work * 50) * 3}/T</td>
-              <td>{(this.state.body.work * 50) * 4}/T</td>
+              <td>{(this.state.body.work * 50).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 50) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 50) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 50) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 50) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Harvest (Energy)</td>
-              <td>{this.state.body.work * 2}/T</td>
-              <td>{(this.state.body.work * 2) * 3}/T</td>
-              <td>{(this.state.body.work * 2) * 5}/T</td>
-              <td>{(this.state.body.work * 2) * 7}/T</td>
+              <td>{(this.state.body.work * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 2) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 2) * 5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 2) * 7).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 2) * this.creepLifespan()).toLocaleString()}</td> 
             </tr>
             <tr>
               <td>Harvest (Mineral)</td>
-              <td>{this.state.body.work * 1}/T</td>
-              <td>{(this.state.body.work * 1) * 3}/T</td>
-              <td>{(this.state.body.work * 1) * 5}/T</td>
-              <td>{(this.state.body.work * 1) * 7}/T</td>
+              <td>{(this.state.body.work * 1).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 7).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Heal</td>
-              <td>{this.state.body.heal * 12}/T</td>
-              <td>{(this.state.body.heal * 12) * 2}/T</td>
-              <td>{(this.state.body.heal * 12) * 3}/T</td>
-              <td>{(this.state.body.heal * 12) * 4}/T</td>
+              <td>{(this.state.body.heal * 12).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 12) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 12) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 12) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 12) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td rowSpan={3}>Ranged Attack & Ranged Mass Attack</td>
-              <td>{this.state.body.ranged_attack * 1}/T</td>
-              <td>{(this.state.body.ranged_attack * 1) * 2}/T</td>
-              <td>{(this.state.body.ranged_attack * 1) * 3}/T</td>
-              <td>{(this.state.body.ranged_attack * 1) * 4}/T</td>
+              <td>{(this.state.body.ranged_attack * 1).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 1) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 1) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 1) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 1) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
             <tr>
-              <td>{this.state.body.ranged_attack * 4}/T</td>
-              <td>{(this.state.body.ranged_attack * 4) * 2}/T</td>
-              <td>{(this.state.body.ranged_attack * 4) * 3}/T</td>
-              <td>{(this.state.body.ranged_attack * 4) * 4}/T</td>
+              <td>{(this.state.body.ranged_attack * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 4) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 4) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 4) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 4) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
             <tr>
-              <td>{this.state.body.ranged_attack * 10}/T</td>
-              <td>{(this.state.body.ranged_attack * 10) * 2}/T</td>
-              <td>{(this.state.body.ranged_attack * 10) * 3}/T</td>
-              <td>{(this.state.body.ranged_attack * 10) * 4}/T</td>
+              <td>{(this.state.body.ranged_attack * 10).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 10) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 10) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 10) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.ranged_attack * 10) * this.creepLifespan()).toLocaleString()}</td>               
             </tr>
             <tr>
               <td>Ranged Heal</td>
-              <td>{this.state.body.heal * 4}/T</td>
-              <td>{(this.state.body.heal * 4) * 2}/T</td>
-              <td>{(this.state.body.heal * 4) * 3}/T</td>
-              <td>{(this.state.body.heal * 4) * 4}/T</td>
+              <td>{(this.state.body.heal * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 4) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 4) * 3).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 4) * 4).toLocaleString()}/T</td>
+              <td>{((this.state.body.heal * 4) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
             <tr>
               <td>Repair</td>
-              <td>{this.state.body.work * 100}/T</td>
-              <td>{(this.state.body.work * 100) * 1.5}/T</td>
-              <td>{(this.state.body.work * 100) * 1.8}/T</td>
-              <td>{(this.state.body.work * 100) * 2}/T</td>
+              <td>{(this.state.body.work * 100).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 100) * 1.5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 100) * 1.8).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 100) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 100) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Upgrade Controller</td>
-              <td>{this.state.body.work * 1}/T</td>
-              <td>{(this.state.body.work * 1) * 1.5}/T</td>
-              <td>{(this.state.body.work * 1) * 1.8}/T</td>
-              <td>{(this.state.body.work * 1) * 2}/T</td>
+              <td>{(this.state.body.work * 1).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 1.5).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 1.8).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * 2).toLocaleString()}/T</td>
+              <td>{((this.state.body.work * 1) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
             <tr>
               <td>Carry</td>
-              <td>{this.state.body.carry * 50}</td>
-              <td>{(this.state.body.carry * 50) * 2}</td>
-              <td>{(this.state.body.carry * 50) * 3}</td>
-              <td>{(this.state.body.carry * 50) * 4}</td>
+              <td>{(this.state.body.carry * 50).toLocaleString()}</td>
+              <td>{((this.state.body.carry * 50) * 2).toLocaleString()}</td>
+              <td>{((this.state.body.carry * 50) * 3).toLocaleString()}</td>
+              <td>{((this.state.body.carry * 50) * 4).toLocaleString()}</td>
+              <td></td>
             </tr>
             <tr>
               <td>Move</td>
@@ -283,10 +294,11 @@ export class CreepDesigner extends React.Component{
               <td>{(this.state.body.move * 2) * 2}</td>
               <td>{(this.state.body.move * 2) * 3}</td>
               <td>{(this.state.body.move * 2) * 4}</td>
+              <td></td>
             </tr>
             <tr>
               <td>Health</td>
-              <td colSpan={4} style={{textAlign: 'center'}}>{this.count() * 100} ({this.state.body.tough * 100} from TOUGH)</td>
+              <td colSpan={5} style={{textAlign: 'center'}}>{(this.count() * 100).toLocaleString()} ({(this.state.body.tough * 100).toLocaleString()} from TOUGH)</td>
             </tr>
           </tbody>
         </table>
