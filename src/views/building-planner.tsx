@@ -2,6 +2,7 @@ import * as jQuery from 'jquery'
 import * as React from 'react'
 import {Form, Text, Select} from 'react-form'
 import * as _ from 'lodash'
+import * as LZString from 'lz-string'
 //import {Link} from 'react-router-dom'
 
 interface TerrainMap{
@@ -116,6 +117,15 @@ export class BuildingPlanner extends React.Component{
         component.setState({shards: shards})
       }
     })
+
+    let params = location.href.split('?')[1]
+    let searchParams = new URLSearchParams(params)
+
+    if(searchParams.get('share')){
+      let json = LZString.decompressFromEncodedURIComponent(searchParams.get('share')!)
+
+      this.loadJSON(JSON.parse(json))
+    }
   }
 
   handleControlForm(values: {[field: string]: any}){
@@ -200,9 +210,15 @@ export class BuildingPlanner extends React.Component{
   }
 
   import(e: any){
-    let component = this
     let json = JSON.parse(e.target.value)
     
+    this.loadJSON(json)
+  }
+
+  loadJSON(json: any){
+    console.dir(json)
+    let component = this
+
     jQuery.ajax({
       url: '/api/terrain/' + json.shard + '/' + json.name,
       dataType: 'json',
@@ -277,6 +293,12 @@ export class BuildingPlanner extends React.Component{
     return road
   }
 
+  shareableLink(){
+    let string = LZString.compressToEncodedURIComponent(this.json())
+
+    return "https://screeps.arcath.net/building-planner/?share=" + string
+  }
+
   render(){
     return <div className="buildingPlanner">
       <div className="map">
@@ -332,6 +354,7 @@ export class BuildingPlanner extends React.Component{
           })}
         </ul>
         <textarea value={this.json()} id="json-data" onChange={(e) => this.import(e)}></textarea>
+        <a href={this.shareableLink()}>Shareable Link</a>
       </div>
     </div>
   }

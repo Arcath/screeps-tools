@@ -46,6 +46,10 @@ export default {
         ],
         'node_modules/lodash/lodash.js': [
           'filter'
+        ],
+        'node_modules/lz-string/libs/lz-string.js': [
+          'compressToEncodedURIComponent',
+          'decompressFromEncodedURIComponent'
         ]
       }
     }),
