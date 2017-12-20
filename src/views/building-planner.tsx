@@ -177,7 +177,7 @@ export class BuildingPlanner extends React.Component{
 
     if(structures[structure]){
       structures[structure] = _.filter(structures[structure], (pos) => {
-        return (pos.x !== x && pos.y !== y)
+        return !(pos.x === x && pos.y === y)
       })
     }
 
@@ -459,6 +459,9 @@ class MapCell extends React.Component<MapCellProps>{
 
     if(this.state.structure !== '' || this.state.road || this.state.rampart){
       this.props.parent.removeStructure(this.props.x, this.props.y, this.state.structure)
+      this.props.parent.removeStructure(this.props.x, this.props.y, 'rampart')
+      this.props.parent.removeStructure(this.props.x, this.props.y, 'road')
+      
 
       this.setState({structure: '', road: false, rampart: false})
     }
