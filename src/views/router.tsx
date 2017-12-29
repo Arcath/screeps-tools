@@ -10,6 +10,7 @@ import {
 import {BuildingPlanner} from './building-planner'
 import {CreepDesigner} from './creep-designer'
 import {Index} from './index'
+import {MemoryViewer} from './memory-viewer'
 
 const AppRouter = () => (
   <div className="screeps-tools">
@@ -18,11 +19,13 @@ const AppRouter = () => (
       <NavLink to='/' exact>Tools</NavLink>
       <NavLink to='/building-planner'>Building Planner</NavLink>
       <NavLink to='/creep-designer'>Creep Designer</NavLink>
+      <NavLink to='/memory-viewer'>Memory Viewer</NavLink>
       <a href="https://github.com/Arcath/screeps-tools" className="gh-link">GitHub</a>
     </div>
     <Switch>
       <Route path='/building-planner'component={BuildingPlanner} />
       <Route path='/creep-designer' component={CreepDesigner} />
+      <Route path='/memory-viewer' component={MemoryViewer} />
       <Route path='/' exact component={Index} />
     </Switch>
   </div>
