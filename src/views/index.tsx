@@ -10,6 +10,9 @@ export const Index = () => (
       <li>
         <Link to='/creep-designer'>Creep Designer</Link>
       </li>
+      <li>
+        <Link to='/memory-viewer'>Memory Viewer</Link>
+      </li>
     </ul>
   </div>
 )
