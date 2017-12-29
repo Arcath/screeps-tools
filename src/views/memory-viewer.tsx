@@ -2,10 +2,17 @@ import * as jQuery from 'jquery'
 import * as React from 'react'
 import ReactJson from 'react-json-view'
 
+type SelectOptions = Array<{
+  value: string
+  label: string
+}>
+
 export class MemoryViewer extends React.Component{
   state: {
     token: string
     data: any
+    shards: SelectOptions
+    shard: string
   }
 
   constructor(props: any){
@@ -19,8 +26,27 @@ export class MemoryViewer extends React.Component{
 
     this.state = {
       token: token,
-      data: {}
+      data: {},
+      shards: [],
+      shard: 'shard0'
     }
+  }
+
+  componentDidMount(){
+    let component = this
+
+    jQuery.ajax({
+      url: '/api/shards',
+      dataType: 'json',
+      success: (data: any) => {
+        let shards: SelectOptions = []
+        data.shards.forEach((shard: {name: string}) => {
+          shards.push({label: shard.name, value: shard.name})
+        })
+
+        component.setState({shards: shards})
+      }
+    })
   }
 
   setToken(e: any){
@@ -28,10 +54,14 @@ export class MemoryViewer extends React.Component{
     localStorage.setItem('token', e.target.value)
   }
 
+  setShard(e: any){
+    this.setState({shard: e.target.value})
+  }
+
   loadMemory(){
     let component = this
     jQuery.ajax({
-      url: '/api/memory/shard1',
+      url: '/api/memory/' + this.state.shard,
       method: 'get',
       dataType: 'json',
       headers: {
@@ -48,6 +78,11 @@ export class MemoryViewer extends React.Component{
       <div className="panel">
         <p>
           <input type="text" placeholder="AUTH Token" onChange={(e) => this.setToken(e)} value={this.state.token} />
+          <select onChange={(e) => this.setShard(e)}>
+            {this.state.shards.map((shard) => (
+              <option value={shard.value}>{shard.label}</option>
+            ))}
+          </select>
           <button onClick={(e) => this.loadMemory()}>Load Memory</button>
         </p>
         <p>
