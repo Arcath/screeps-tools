@@ -1,6 +1,7 @@
 import * as jQuery from 'jquery'
 import * as React from 'react'
 import ReactJson from 'react-json-view'
+import jq from 'jq-web'
 
 type SelectOptions = Array<{
   value: string
@@ -11,8 +12,10 @@ export class MemoryViewer extends React.Component{
   state: {
     token: string
     data: any
+    oData: any
     shards: SelectOptions
     shard: string
+    query: string
   }
 
   constructor(props: any){
@@ -27,8 +30,10 @@ export class MemoryViewer extends React.Component{
     this.state = {
       token: token,
       data: {},
+      oData: {},
       shards: [],
-      shard: 'shard0'
+      shard: 'shard0',
+      query: ''
     }
   }
 
@@ -68,7 +73,33 @@ export class MemoryViewer extends React.Component{
         'X-Token': this.state.token
       },
       success: (data: any) => {
-        component.setState({data: data})
+        component.setState({data: data, oData: data})
+      }
+    })
+  }
+
+  setQuery(e: any){
+    this.setState({query: e.target.value})
+  }
+
+  query(){
+    let data = jq(this.state.oData, this.state.query)
+
+    this.setState({data: data})
+  }
+
+  refresh(){
+    let component = this
+    jQuery.ajax({
+      url: '/api/memory/' + this.state.shard,
+      method: 'get',
+      dataType: 'json',
+      headers: {
+        'X-Token': this.state.token
+      },
+      success: (data: any) => {
+        component.setState({oData: data})
+        component.query()
       }
     })
   }
@@ -90,6 +121,14 @@ export class MemoryViewer extends React.Component{
         </p>
         <p>
           Your Token will be saved into local storage (you can clear it by running <i>localStorage.removeItem('token')</i> in your dev console)
+        </p>
+        <p>
+          You can query your data using <a href="https://stedolan.github.io/jq/">JQ</a>. Enter your query here and hit <i>Run JQ</i> to run it.
+        </p>
+        <p>
+          <textarea placeholder="JQ Query" onChange={(e) => this.setQuery(e)} />
+          <button onClick={(e) => this.query()}>Run JQ</button>
+          <button onClick={(e) => this.refresh()}>Refresh Data</button>
         </p>
       </div>
       <div className="panel">

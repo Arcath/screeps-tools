@@ -8,3 +8,7 @@ declare module 'react-json-view'{
 
   export default ReactJson
 }
+
+declare module 'jq-web'{
+  export default function jq(object: any, query: string): any
+}

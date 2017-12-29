@@ -10,6 +10,11 @@ export default {
     file: './public/js/app.js',
     format: 'iife'
   },
+  globals: {
+    fs: false,
+    path: false,
+    crypto: false
+  },
   plugins: [
     replace({
       'process.env.NODE_ENV': JSON.stringify( 'production' )
