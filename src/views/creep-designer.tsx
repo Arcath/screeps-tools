@@ -1,6 +1,17 @@
 //import * as jQuery from 'jquery'
 import * as React from 'react'
 
+const RCL_ENERGY: {[level: number]: number} = {
+  1: 300,
+  2: 550,
+  3: 800,
+  4: 1300,
+  5: 1800,
+  6: 2300,
+  7: 5600,
+  8: 12900
+}
+
 const BODYPART_COST: {[part: string]: number} = {
   move: 50,
   work: 100,
@@ -73,7 +84,7 @@ export class CreepDesigner extends React.Component{
   add(part: string){
     let body = this.state.body
     
-    if(this.count() < 50){
+    if(this.count() < 50 && (this.totalCost() + BODYPART_COST[part]) < RCL_ENERGY[8]){
       if(body[part]){
         body[part] += 1
       }else{
@@ -137,6 +148,18 @@ export class CreepDesigner extends React.Component{
     }
   }
 
+  requiredRCL(){
+    let rcl = 8
+    let cost = this.totalCost()
+    Object.keys(RCL_ENERGY).reverse().forEach((rclLevel) => {
+      if(cost <= RCL_ENERGY[parseInt(rclLevel)]){
+        rcl = parseInt(rclLevel)
+      }
+    })
+
+    return rcl
+  }
+
   render(){
     return <div className="creep-designer">
       <div className="panel">
@@ -164,7 +187,7 @@ export class CreepDesigner extends React.Component{
             })}
             <tr>
               <td>Totals</td>
-              <td>{this.totalCost()}</td>
+              <td>{this.totalCost()} (RCL {this.requiredRCL()})</td>
               <td colSpan={3}>{this.count()}</td>
             </tr>
           </tbody>
@@ -186,7 +209,7 @@ export class CreepDesigner extends React.Component{
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr style={{backgroundColor: '#f93842', color: '#fff'}}>
               <td>Attack</td>
               <td>{(this.state.body.attack * 30).toLocaleString()}/T</td>
               <td>{((this.state.body.attack * 30) * 2).toLocaleString()}/T</td>
@@ -194,7 +217,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.attack * 30) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.attack * 30) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Build</td>
               <td>{(this.state.body.work * 5).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 5) * 1.5).toLocaleString()}/T</td>
@@ -202,7 +225,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 5) * 2).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 5) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Dismantle</td>
               <td>{(this.state.body.work * 50).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 50) * 2).toLocaleString()}/T</td>
@@ -210,7 +233,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 50) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 50) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Harvest (Energy)</td>
               <td>{(this.state.body.work * 2).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 2) * 3).toLocaleString()}/T</td>
@@ -218,7 +241,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 2) * 7).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 2) * this.creepLifespan()).toLocaleString()}</td> 
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Harvest (Mineral)</td>
               <td>{(this.state.body.work * 1).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 1) * 3).toLocaleString()}/T</td>
@@ -226,7 +249,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 1) * 7).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 1) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#65fd62', color: '#444'}}>
               <td>Heal</td>
               <td>{(this.state.body.heal * 12).toLocaleString()}/T</td>
               <td>{((this.state.body.heal * 12) * 2).toLocaleString()}/T</td>
@@ -234,7 +257,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.heal * 12) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.heal * 12) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#5d7fb2', color: '#fff'}}>
               <td rowSpan={3}>Ranged Attack & Ranged Mass Attack</td>
               <td>{(this.state.body.ranged_attack * 1).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 1) * 2).toLocaleString()}/T</td>
@@ -242,21 +265,21 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.ranged_attack * 1) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 1) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#5d7fb2', color: '#fff'}}>
               <td>{(this.state.body.ranged_attack * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 4) * 2).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 4) * 3).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 4) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 4) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#5d7fb2', color: '#fff'}}>
               <td>{(this.state.body.ranged_attack * 10).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 10) * 2).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 10) * 3).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 10) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.ranged_attack * 10) * this.creepLifespan()).toLocaleString()}</td>               
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#65fd62', color: '#444'}}>
               <td>Ranged Heal</td>
               <td>{(this.state.body.heal * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.heal * 4) * 2).toLocaleString()}/T</td>
@@ -264,7 +287,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.heal * 4) * 4).toLocaleString()}/T</td>
               <td>{((this.state.body.heal * 4) * this.creepLifespan()).toLocaleString()}</td>              
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Repair</td>
               <td>{(this.state.body.work * 100).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 100) * 1.5).toLocaleString()}/T</td>
@@ -272,7 +295,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 100) * 2).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 100) * this.creepLifespan()).toLocaleString()}</td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Upgrade Controller</td>
               <td>{(this.state.body.work * 1).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 1) * 1.5).toLocaleString()}/T</td>
@@ -288,7 +311,7 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.carry * 50) * 4).toLocaleString()}</td>
               <td></td>
             </tr>
-            <tr>
+            <tr style={{backgroundColor: '#a9b7c6', color: '#444'}}>
               <td>Move</td>
               <td>{this.state.body.move * 2}</td>
               <td>{(this.state.body.move * 2) * 2}</td>
