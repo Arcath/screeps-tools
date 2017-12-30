@@ -1,5 +1,7 @@
 # Screeps Tools
 
+[Slack](https://screeps.slack.com/messages/C8LFD7KEX/)
+
 A collection of tools for players of the Programmers MMO Screeps.
 
 ## Building Planner
@@ -14,3 +16,7 @@ It has a few features that the old planner didn't have:
 ## Creep Designer
 
 Allows you to build creeps and see the stats & avialable creep functions for that creep.
+
+## Memory Viewer
+
+View your memory from any shard and query it using jq.

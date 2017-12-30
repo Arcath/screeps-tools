@@ -21,6 +21,7 @@ const AppRouter = () => (
       <NavLink to='/creep-designer'>Creep Designer</NavLink>
       <NavLink to='/memory-viewer'>Memory Viewer</NavLink>
       <a href="https://github.com/Arcath/screeps-tools" className="gh-link">GitHub</a>
+      <a href="https://screeps.slack.com/messages/C8LFD7KEX/" className="gh-link">Slack</a>
     </div>
     <Switch>
       <Route path='/building-planner'component={BuildingPlanner} />
