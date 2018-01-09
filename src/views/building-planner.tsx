@@ -303,7 +303,7 @@ export class BuildingPlanner extends React.Component{
     return <div className="buildingPlanner">
       <div className="map">
         {[...Array(50)].map((x: number, j) => {
-          return <div className="row">
+          return <div className="row" key={j}>
             {[...Array(50)].map((y: number, i) => {
               return <MapCell
                 x={i}
@@ -313,6 +313,7 @@ export class BuildingPlanner extends React.Component{
                 structure={this.getStructure(i, j)}
                 road={this.isRoad(i,j)}
                 rampart={this.isRampart(i,j)}
+                key={'mc-'+ i + '-' + j}
               />
             })}
           </div>
@@ -348,7 +349,7 @@ export class BuildingPlanner extends React.Component{
         </p>
         <ul className="brushes">
           {Object.keys(STRUCTURES).map((key) => {
-            return <li onClick={() => this.setState({brush: key})} className={this.state.brush === key ? 'active' : ''}>
+            return <li onClick={() => this.setState({brush: key})} className={this.state.brush === key ? 'active' : ''} key={key}>
               <img src={'/img/screeps/' + key + '.png'} /> {STRUCTURES[key]} {this.state.structures[key] ? this.state.structures[key].length : 0}/{CONTROLLER_STRUCTURES[key][this.state.rcl]}
             </li>
           })}

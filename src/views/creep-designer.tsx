@@ -173,7 +173,7 @@ export class CreepDesigner extends React.Component{
           </thead>
           <tbody>
             {Object.keys(BODYPARTS).map((part) => {
-              return <tr>
+              return <tr key={part}>
                 <td>{BODYPARTS[part]}</td>
                 <td>{BODYPART_COST[part]}</td>
                 <td>
