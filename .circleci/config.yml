@@ -31,8 +31,8 @@ jobs:
         
       # run tests!
       - run:
-       name: Test
-      command: npm test
+        name: Test
+        command: npm test
       
       - add_ssh_key:
         fingerprints:
