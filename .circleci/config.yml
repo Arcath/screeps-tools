@@ -27,5 +27,6 @@ jobs:
           name: Deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh-keyscan ${DEPLOY_HOST} -p ${DEPLOY_PORT} >> ~/.ssh/known_hosts
               ssh ${DEPLOY_USER}@${DEPLOY_HOST} -p ${DEPLOY_PORT} "${DEPLOY_CMD}"
             fi
