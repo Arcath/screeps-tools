@@ -36,7 +36,7 @@ jobs:
       
       - add_ssh_key:
         fingerprints:
-         - "72:ae:47:19:21:3c:8f:bf:6f:2f:ae:97:08:bd:fa:25"
+          - "72:ae:47:19:21:3c:8f:bf:6f:2f:ae:97:08:bd:fa:25"
 
       # Delploy
       - run:
