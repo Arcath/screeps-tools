@@ -7,25 +7,25 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          - v1-dependencies-
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
       - run:
-        name: Install Dependencies
-        command: npm install
+          name: Install Dependencies
+          command: npm install
       - save_cache:
-        paths:
-          - node_modules
-        key: v1-dependencies-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
       - run:
-        name: Test
-        command: npm test
+          name: Test
+          command: npm test
       - add_ssh_key:
-        fingerprints:
-          - "72:ae:47:19:21:3c:8f:bf:6f:2f:ae:97:08:bd:fa:25"
+          fingerprints:
+            - "72:ae:47:19:21:3c:8f:bf:6f:2f:ae:97:08:bd:fa:25"
       - run:
-        name: Deploy
-        command: |
-          if [ "${CIRCLE_BRANCH}" == "master" ]; then
-            ssh ${DEPLOY_USER}@${DEPLOY_HOST} -p ${DEPLOY_PORT} "${DEPLOY_CMD}"
-          fi
+          name: Deploy
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh ${DEPLOY_USER}@${DEPLOY_HOST} -p ${DEPLOY_PORT} "${DEPLOY_CMD}"
+            fi
