@@ -1,5 +1,7 @@
 # Screeps Tools
 
+[![CircleCI](https://circleci.com/gh/Arcath/screeps-tools.svg?style=svg)](https://circleci.com/gh/Arcath/screeps-tools)
+
 [Slack](https://screeps.slack.com/messages/C8LFD7KEX/)
 
 A collection of tools for players of the Programmers MMO Screeps.
