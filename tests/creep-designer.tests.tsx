@@ -23,4 +23,16 @@ describe('Creep Designer', () => {
     designer.instance().add('claim')
     expect(designer.instance().requiredRCL()).toEqual(3)
   })
+
+  it('should import data', () => {
+    const designer = shallow(<CreepDesigner />)
+
+    designer.instance().import({
+      target: {
+        value: '[MOVE, WORK, CARRY]'
+      }
+    })
+
+    expect(designer.state().body.carry).toEqual(1)
+  })
 })

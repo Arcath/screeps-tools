@@ -160,6 +160,17 @@ export class CreepDesigner extends React.Component{
     return rcl
   }
 
+  import(e: any){
+    let data = e.target.value
+    let body = this.state.body
+
+    Object.keys(BODYPARTS).forEach((part) => {
+      body[part] = (data.match(BODYPARTS[part]) || []).length
+    })
+
+    this.setState({body: body})
+  }
+
   render(){
     return <div className="creep-designer">
       <div className="panel">
@@ -193,8 +204,8 @@ export class CreepDesigner extends React.Component{
           </tbody>
         </table>
         <Creep body={this.state.body} />
-        <textarea value={this.body()}></textarea>
-        <a href={this.shareLink()}>Shareable Link</a>
+        <textarea value={this.body()} onChange={(e) => this.import(e)}></textarea>
+        <a href={this.shareLink()}>Shareable Link</a> Paste a body array above to import it.
       </div>
       <div className="panel">
         <table className="stats">
