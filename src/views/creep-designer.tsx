@@ -165,7 +165,7 @@ export class CreepDesigner extends React.Component{
     let body = this.state.body
 
     Object.keys(BODYPARTS).forEach((part) => {
-      body[part] = (data.match(BODYPARTS[part]) || []).length
+      body[part] = (data.match(new RegExp(BODYPARTS[part], 'g')) || []).length
     })
 
     this.setState({body: body})

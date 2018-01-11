@@ -34,5 +34,13 @@ describe('Creep Designer', () => {
     })
 
     expect(designer.state().body.carry).toEqual(1)
+
+    designer.instance().import({
+      target: {
+        value: '[MOVE, WORK, CARRY, CARRY]'
+      }
+    })
+
+    expect(designer.state().body.carry).toEqual(2)
   })
 })
