@@ -2,6 +2,9 @@ import * as express from 'express'
 import * as path from 'path'
 import * as superagent from 'superagent'
 import * as zlib from 'zlib'
+import * as SocketIO from 'socket.io'
+import * as http from 'http'
+import {ScreepsAPI} from 'screeps-api'
 
 let app = express()
 
@@ -49,4 +52,32 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))
 })
 
-app.listen(3000)
+let server = http.createServer(app)
+
+let io = SocketIO(server)
+
+io.on('connection', (socket) => {
+  socket.emit('welcome', {ok: true})
+
+  socket.on('connect-console', (data) => {
+    let api = new ScreepsAPI({
+      token: data.token,
+      protocol: 'https',
+      hostname: 'screeps.com',
+      port: 443,
+      path: '/'
+    })
+
+    api.socket.connect()
+    api.socket.subscribe('console')
+    api.socket.on('console', (event) => {
+      socket.emit('message', event)
+    })
+
+    socket.on('disconnect', () => {
+      api.socket.disconnect()
+    })
+  })
+})
+
+server.listen(3000)
