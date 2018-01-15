@@ -26,7 +26,7 @@ declare module 'screeps-api'{
     constructor(opts: ScreepsAPIOptions)
 
     socket: WebSocket & {
-      connect(): void
+      connect(): Promise<any>
       subscribe(channel: string): void
       on(event: string, handler: (event: Event) => void): void
       disconnect(): void

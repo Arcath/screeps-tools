@@ -68,15 +68,29 @@ io.on('connection', (socket) => {
       path: '/'
     })
 
-    api.socket.connect()
-    api.socket.subscribe('console')
-    api.socket.on('console', (event) => {
-      socket.emit('message', event)
-    })
+    api.socket.connect().then(() => {
+      api.socket.subscribe('console')
+      api.socket.on('console', (event) => {
+        socket.emit('message', event)
+      })
 
-    socket.on('disconnect', () => {
-      api.socket.disconnect()
+      socket.on('disconnect', () => {
+        api.socket.disconnect()
+      })
+    }).catch((e: Error) => {
+      socket.emit('message', {
+        channel: 'console',
+        id: 'err',
+        data: {
+          messages: {
+            log: [e.message]
+          },
+          shard: 'shard0'
+        },
+        type: 'user'
+      })
     })
+    
   })
 })
 

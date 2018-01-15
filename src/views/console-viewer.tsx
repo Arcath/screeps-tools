@@ -82,6 +82,18 @@ export class ConsoleViewer extends React.Component{
     this.socket.on('welcome', (data: any) => {
       if(data.ok){
         console.log('connected to screeps tools server')
+        let events = component.state.events
+        events.push({
+          channel: 'console',
+          id: 'connest',
+          data: {
+            messages: {
+              log: ['Connected to Screeps Tools (WebSocket)']
+            },
+            shard: 'shard0'
+          },
+          type: 'user'
+        })
       }
     })
 
