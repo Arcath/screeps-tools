@@ -3,6 +3,7 @@ import * as React from 'react'
 import {Form, Text, Select} from 'react-form'
 import * as _ from 'lodash'
 import * as LZString from 'lz-string'
+import * as ReactGA from 'react-ga'
 //import {Link} from 'react-router-dom'
 
 interface TerrainMap{
@@ -131,6 +132,11 @@ export class BuildingPlanner extends React.Component{
   handleControlForm(values: {[field: string]: any}){
     let component = this
 
+    ReactGA.event({
+      category: 'Building Planner',
+      action: 'Loaded Terrain Data'
+    })
+
     jQuery.ajax({
       url: '/api/terrain/' + values.shard + '/' + values.room,
       dataType: 'json',
@@ -211,12 +217,16 @@ export class BuildingPlanner extends React.Component{
 
   import(e: any){
     let json = JSON.parse(e.target.value)
+
+    ReactGA.event({
+      category: 'Building Planner',
+      action: 'Imported JSON'
+    })
     
     this.loadJSON(json)
   }
 
   loadJSON(json: any){
-    console.dir(json)
     let component = this
 
     jQuery.ajax({

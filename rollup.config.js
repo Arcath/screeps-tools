@@ -55,6 +55,12 @@ export default {
         'node_modules/lz-string/libs/lz-string.js': [
           'compressToEncodedURIComponent',
           'decompressFromEncodedURIComponent'
+        ],
+        'node_modules/react-ga/dist/react-ga.js': [
+          'initialize',
+          'event',
+          'set',
+          'pageview'
         ]
       }
     }),

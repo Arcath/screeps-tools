@@ -2,6 +2,7 @@ import * as jQuery from 'jquery'
 import * as React from 'react'
 import ReactJson from 'react-json-view'
 import jq from 'jq-web'
+import * as ReactGA from 'react-ga'
 
 type SelectOptions = Array<{
   value: string
@@ -64,6 +65,11 @@ export class MemoryViewer extends React.Component{
   }
 
   loadMemory(){
+    ReactGA.event({
+      category: 'Memory Viewer',
+      action: 'Loaded Memory'
+    })
+
     let component = this
     jQuery.ajax({
       url: '/api/memory/' + this.state.shard,
@@ -83,12 +89,22 @@ export class MemoryViewer extends React.Component{
   }
 
   query(){
+    ReactGA.event({
+      category: 'Memory Viewer',
+      action: 'Ran JQ Query'
+    })
+
     let data = jq(this.state.oData, this.state.query)
 
     this.setState({data: data})
   }
 
   refresh(){
+    ReactGA.event({
+      category: 'Memory Viewier',
+      action: 'Refreshed Data'
+    })
+
     let component = this
     jQuery.ajax({
       url: '/api/memory/' + this.state.shard,

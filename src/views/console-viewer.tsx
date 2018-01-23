@@ -1,6 +1,7 @@
 import * as jQuery from 'jquery'
 import * as React from 'react'
 import ReactJson from 'react-json-view'
+import * as ReactGA from 'react-ga'
 
 type SelectOptions = Array<{
   value: string
@@ -121,6 +122,11 @@ export class ConsoleViewer extends React.Component{
   }
 
   connectConsole(){
+    ReactGA.event({
+      category: 'Console',
+      action: 'Connected Console to Screeps'
+    })
+
     this.socket.emit('connect-console', {token: this.state.token})
   }
 
