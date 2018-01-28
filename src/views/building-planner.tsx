@@ -313,6 +313,31 @@ export class BuildingPlanner extends React.Component{
     return "https://screeps.arcath.net/building-planner/?share=" + string
   }
 
+  translate(direction: 'up' | 'right' | 'down' | 'left'){
+    let structures = this.state.structures
+
+    Object.keys(structures).forEach((structureName) => {
+      structures[structureName].forEach((pos) => {
+        switch(direction){
+          case 'up':
+            pos.y --
+          break
+          case 'down':
+            pos.y ++
+          break
+          case 'right':
+            pos.x ++
+          break
+          case 'left':
+            pos.x --
+          break
+        }
+      })
+    })
+
+    this.setState({structures: structures})
+  }
+
   render(){
     return <div className="buildingPlanner">
       <div className="map">
@@ -350,7 +375,7 @@ export class BuildingPlanner extends React.Component{
           X: {this.state.x} Y: {this.state.y}
         </p>
         <p>
-          <select value={this.state.rcl} onChange={(e) => this.setRCL(e)}>
+          RCL: <select value={this.state.rcl} onChange={(e) => this.setRCL(e)}>
             <option value={1}>1</option>
             <option value={2}>2</option>
             <option value={3}>3</option>
@@ -361,6 +386,23 @@ export class BuildingPlanner extends React.Component{
             <option value={8}>8</option>
           </select>
         </p>
+        <table>
+          <tr>
+            <td></td>
+            <td><button onClick={(e) => {this.translate('up')}}>up</button></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><button onClick={(e) => {this.translate('left')}}>left</button></td>
+            <td>Translate</td>
+            <td><button onClick={(e) => {this.translate('right')}}>right</button></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td><button onClick={(e) => {this.translate('down')}}>down</button></td>
+            <td></td>
+          </tr>
+        </table>
         <ul className="brushes">
           {Object.keys(STRUCTURES).map((key) => {
             return <li onClick={() => this.setState({brush: key})} className={this.state.brush === key ? 'active' : ''} key={key}>
