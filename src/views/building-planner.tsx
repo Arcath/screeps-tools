@@ -229,34 +229,38 @@ export class BuildingPlanner extends React.Component{
   loadJSON(json: any){
     let component = this
 
-    jQuery.ajax({
-      url: '/api/terrain/' + json.shard + '/' + json.name,
-      dataType: 'json',
-      success: (data: any) => {
-        let terrain = data.terrain[0].terrain
-        let terrainMap: TerrainMap = {}
-        for (var y = 0; y < 50; y++) {
-          terrainMap[y] = {}
-          for (var x = 0; x < 50; x++) {
-            let code = terrain.charAt(y * 50 + x)
-            terrainMap[y][x] = code
+    if(json.shard && json.name){
+      jQuery.ajax({
+        url: '/api/terrain/' + json.shard + '/' + json.name,
+        dataType: 'json',
+        success: (data: any) => {
+          let terrain = data.terrain[0].terrain
+          let terrainMap: TerrainMap = {}
+          for (var y = 0; y < 50; y++) {
+            terrainMap[y] = {}
+            for (var x = 0; x < 50; x++) {
+              let code = terrain.charAt(y * 50 + x)
+              terrainMap[y][x] = code
+            }
           }
+
+          component.setState({terrain: terrainMap})
         }
+      })
+    }
 
-        let structures: {
-          [structure: string]: Array<{
-            x: number
-            y: number
-          }>
-        } = {}
+    let structures: {
+      [structure: string]: Array<{
+        x: number
+        y: number
+      }>
+    } = {}
 
-        Object.keys(json.buildings).forEach((structure) => {
-          structures[structure] = json.buildings[structure].pos
-        })
-
-        component.setState({terrain: terrainMap, room: json.name, shard: json.shard, rcl: json.rcl, structures: structures})
-      }
+    Object.keys(json.buildings).forEach((structure) => {
+      structures[structure] = json.buildings[structure].pos
     })
+
+    component.setState({room: json.name, shard: json.shard, rcl: json.rcl, structures: structures})    
   }
 
   getStructure(x: number, y: number){
