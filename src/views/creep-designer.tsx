@@ -171,6 +171,15 @@ export class CreepDesigner extends React.Component{
     this.setState({body: body})
   }
 
+  set(e: any, part: string){
+    let value = e.target.value
+    let body = this.state.body
+    
+    body[part] = parseInt(value)
+
+    this.setState({body: body})
+  }
+
   render(){
     return <div className="creep-designer">
       <div className="panel">
@@ -190,7 +199,7 @@ export class CreepDesigner extends React.Component{
                 <td>
                   <button onClick={() => this.remove(part)}>-</button>
                 </td>
-                <td>{this.state.body[part] ? this.state.body[part] : 0}</td>
+                <td><input type="number" value={this.state.body[part] ? this.state.body[part] : 0} onChange={(e) => this.set(e, part)} /></td>
                 <td>
                   <button onClick={() => this.add(part)}>+</button>
                 </td>
