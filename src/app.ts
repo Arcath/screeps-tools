@@ -4,9 +4,13 @@ import * as superagent from 'superagent'
 import * as zlib from 'zlib'
 import * as SocketIO from 'socket.io'
 import * as http from 'http'
+import * as bodyParser from 'body-parser'
 import {ScreepsAPI} from 'screeps-api'
+import {CreepDesigner} from './views/creep-designer'
 
 let app = express()
+
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.use('/js', express.static('public/js'))
 app.use('/img', express.static('public/img'))
@@ -45,6 +49,27 @@ app.get('/api/memory/:shard', (req, res) => {
     }else{
       res.json({})
     }
+  })
+})
+
+app.post('/slack/creep', (req, res) => {
+  let creepDesigner = new CreepDesigner({api: true})
+
+  creepDesigner.import({
+    noState: true,
+    target: {
+      value: req.body.text
+    }
+  })
+  
+  res.json({
+    response_type: 'in_channel',
+    text: 'Your creep is done',
+    attachments: [
+      {
+        text: creepDesigner.shareLink()
+      }
+    ]
   })
 })
 

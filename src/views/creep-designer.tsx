@@ -55,19 +55,21 @@ export class CreepDesigner extends React.Component{
       }
     }
 
-    let params = location.href.split('?')[1]
-    let searchParams = new URLSearchParams(params)
+    if(!props.api){
+      let params = location.href.split('?')[1]
+      let searchParams = new URLSearchParams(params)
 
-    if(searchParams.get('share')){
-      let body = searchParams.get('share')!
-      let creepBody = this.state.body
-      let i = 0
-      body.split("#").forEach((count) => {
-        creepBody[Object.keys(BODYPARTS)[i]] = parseInt(count)
-        i += 1
-      })
+      if(searchParams.get('share')){
+        let body = searchParams.get('share')!
+        let creepBody = this.state.body
+        let i = 0
+        body.split("#").forEach((count) => {
+          creepBody[Object.keys(BODYPARTS)[i]] = parseInt(count)
+          i += 1
+        })
 
-      this.setState({body: creepBody})
+        this.setState({body: creepBody})
+      }
     }
   }
 
@@ -168,7 +170,9 @@ export class CreepDesigner extends React.Component{
       body[part] = (data.match(new RegExp(BODYPARTS[part], 'g')) || []).length
     })
 
-    this.setState({body: body})
+    if(!e.noState){
+      this.setState({body: body})
+    }
   }
 
   set(e: any, part: string){
