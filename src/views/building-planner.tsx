@@ -340,7 +340,7 @@ export class BuildingPlanner extends React.Component{
 
   render(){
     return <div className="buildingPlanner">
-      <div className="map">
+      <div className="map" style={{width: (window.innerHeight - 50) + 'px', height: (window.innerHeight - 50) + 'px'}}>
         {[...Array(50)].map((x: number, j) => {
           return <div className="row" key={j}>
             {[...Array(50)].map((y: number, i) => {
