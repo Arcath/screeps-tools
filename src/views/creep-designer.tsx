@@ -266,6 +266,14 @@ export class CreepDesigner extends React.Component{
               <td>{((this.state.body.work * 2) * this.creepLifespan()).toLocaleString()}</td> 
             </tr>
             <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
+              <td>Ticks to drain source</td>
+              <td>{(3000 / (this.state.body.work * 2)).toLocaleString()}</td>
+              <td>{(3000 / ((this.state.body.work * 2) * 3)).toLocaleString()}</td>
+              <td>{(3000 / ((this.state.body.work * 2) * 5)).toLocaleString()}</td>
+              <td>{(3000 / ((this.state.body.work * 2) * 7)).toLocaleString()}</td>
+              <td></td> 
+            </tr>
+            <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
               <td>Harvest (Mineral)</td>
               <td>{(this.state.body.work * 1).toLocaleString()}/T</td>
               <td>{((this.state.body.work * 1) * 3).toLocaleString()}/T</td>
@@ -341,6 +349,14 @@ export class CreepDesigner extends React.Component{
               <td>{(this.state.body.move * 2) * 2}</td>
               <td>{(this.state.body.move * 2) * 3}</td>
               <td>{(this.state.body.move * 2) * 4}</td>
+              <td></td>
+            </tr>
+            <tr style={{backgroundColor: '#a9b7c6', color: '#444'}}>
+              <td>Ticks to Move</td>
+              <td>{(this.count() / (this.state.body.move * 2)).toLocaleString()}</td>
+              <td>{(this.count() / ((this.state.body.move * 2) * 2)).toLocaleString()}</td>
+              <td>{(this.count() / ((this.state.body.move * 2) * 3)).toLocaleString()}</td>
+              <td>{(this.count() / ((this.state.body.move * 2) * 4)).toLocaleString()}</td>
               <td></td>
             </tr>
             <tr>
