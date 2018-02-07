@@ -8,12 +8,12 @@ export default {
   input: './src/mount.ts',
   output: {
     file: './public/js/app.js',
-    format: 'iife'
-  },
-  globals: {
-    fs: false,
-    path: false,
-    crypto: false
+    format: 'iife',
+    globals: {
+      fs: false,
+      path: false,
+      crypto: false
+    }
   },
   plugins: [
     replace({
