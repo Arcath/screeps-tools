@@ -352,11 +352,19 @@ export class CreepDesigner extends React.Component{
               <td></td>
             </tr>
             <tr style={{backgroundColor: '#a9b7c6', color: '#444'}}>
-              <td>Ticks to Move</td>
+              <td>Ticks to Move (Laden)</td>
               <td>{(this.count() / (this.state.body.move * 2)).toLocaleString()}</td>
               <td>{(this.count() / ((this.state.body.move * 2) * 2)).toLocaleString()}</td>
               <td>{(this.count() / ((this.state.body.move * 2) * 3)).toLocaleString()}</td>
               <td>{(this.count() / ((this.state.body.move * 2) * 4)).toLocaleString()}</td>
+              <td></td>
+            </tr>
+            <tr style={{backgroundColor: '#a9b7c6', color: '#444'}}>
+              <td>Ticks to Move (Empty)</td>
+              <td>{((this.count() - this.state.body.carry) / (this.state.body.move * 2)).toLocaleString()}</td>
+              <td>{((this.count() - this.state.body.carry) / ((this.state.body.move * 2) * 2)).toLocaleString()}</td>
+              <td>{((this.count() - this.state.body.carry) / ((this.state.body.move * 2) * 3)).toLocaleString()}</td>
+              <td>{((this.count() - this.state.body.carry) / ((this.state.body.move * 2) * 4)).toLocaleString()}</td>
               <td></td>
             </tr>
             <tr>
