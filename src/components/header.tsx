@@ -16,7 +16,7 @@ const HeaderBar = styled.header`
 export const Header: React.FC = () => {
   return <HeaderBar>
     <Link to="/">
-      <img src="/img/screeps/logo.gif" alt="Screeps Logo" />
+      <img src="/img/screeps/logotype.svg" alt="Screeps Logo" />
     </Link>
     <Link to="/building-planner">Building Planner</Link>
     <Link to="/creep-designer">Creep Designer</Link>

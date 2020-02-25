@@ -83,6 +83,20 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
   const [brush, setBrush] = useState<keyof typeof STRUCTURES>('spawn')
   const [buildings, setBuildings] = useState<{[building: string]: [number, number][]}>({})
   const [asJson, setAsJson] = useState('Regenerate')
+  const [roomName, setRoomName] = useState('')
+  const [shards, setShards] = useState([])
+  const [shard, setShard] = useState('shard0')
+  const [terrain, setTerrain] = useState('0'.repeat(50 * 50))
+
+  if(shards.length === 0){
+    fetch('/api/shards').then((response) => {
+      response.json().then((data) => {
+        setShards(data.shards.map((d: any) => {
+          return d.name
+        }))
+      })
+    })
+  }
 
   const add = () => {
     const newBuildings = {...buildings}
@@ -144,8 +158,9 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
     setAsJson(JSON.stringify(json))
   }
 
-  const cellStyle = (x: number, y: number): CSSProperties => {
+  const cellStyle = (x: number, y: number, tile: number): CSSProperties => {
     let backgroundImage
+    let backgroundColor = '#222'
 
     const structure = structureAt(x, y)
 
@@ -153,10 +168,39 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
       backgroundImage = `url(/img/screeps/${structure}.png)`
     }
 
+    switch(tile){
+      case 0:
+        backgroundColor = '#222'
+        break
+      case 1:
+        backgroundColor = '#000'
+        break
+      case 2:
+        backgroundColor = '#292b18'
+        break
+    }
+
     return {
       backgroundImage,
-      backgroundSize: 'contain'
+      backgroundSize: 'contain',
+      backgroundColor
     }
+  }
+
+  const getTerrain = async () => {
+    const response = await fetch(`/api/terrain/${roomName}-${shard}`)
+
+    const data = await response.json() as {
+      ok: number
+      terrain: {
+        _id: string
+        room: string
+        terrain: string
+        type: string
+      }[]
+    }
+
+    setTerrain(data.terrain[0].terrain)
   }
   
   return <BPLayout>
@@ -164,6 +208,9 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
     <Room>
       {[...Array(50)].map((x: number, j) => {
         return [...Array(50)].map((y: number, i) => {
+          const terrainTile = parseInt(terrain.substr((j * 50) + i, 1))
+          console.log(terrainTile)
+
           return <div key={`${i}-${j}`} 
           onMouseEnter={() => {
             setCursorX(i)
@@ -176,12 +223,21 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
             e.preventDefault()
             remove()
           }}
-          style={cellStyle(i, j)}
+          style={cellStyle(i, j, terrainTile)}
           >&nbsp;</div>
         })
       })}
     </Room>
     <div>
+      <p>
+        <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
+        <select value={shard} onChange={(e) => setShard(e.target.value)}>
+          {shards.map((s) => {
+            return <option key={s} value={s}>{s}</option>
+          })}
+        </select>
+        <button onClick={() => getTerrain()}>Get Terrain</button>
+      </p>
       <p>RCL: <select value={RCL} onChange={(e) => setRCL(parseInt(e.target.value))}>
         <option value={1}>1</option>
         <option value={2}>2</option>
