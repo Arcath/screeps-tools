@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react'
+import React from 'react'
 import './app.css'
 import {Router} from '@reach/router'
 

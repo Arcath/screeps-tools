@@ -200,7 +200,7 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
               border: '1px solid #ccc',
               backgroundColor: structure === brush ? '#ccc' : 'inherit'
             }}>
-              <td><img src={`/img/screeps/${structure}.png`} /></td>
+              <td><img src={`/img/screeps/${structure}.png`} alt={structure} /></td>
               <td>{STRUCTURES[structure]}</td>
               <td>{buildings[structure] ? buildings[structure].length : 0} / {CONTROLLER_STRUCTURES[structure][RCL]}</td>
             </tr>
