@@ -2,3 +2,7 @@ body{
   background-image:linear-gradient(to bottom, #222 0%, #111 100%) !important;
   min-height:100vh;
 }
+
+a{
+  text-decoration:none;
+}

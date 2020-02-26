@@ -11,13 +11,25 @@ const HeaderBar = styled.header`
     height:100%;
     float:left;
   }
+
+  a{
+    color:#7986cb;
+    margin-left:10px;
+
+    &[aria-current]{
+      color:#FF9800;
+    }
+
+    &:hover{
+      color:#FF9800;
+    }
+  }
 `
 
 export const Header: React.FC = () => {
   return <HeaderBar>
-    <Link to="/">
-      <img src="/img/screeps/logotype.svg" alt="Screeps Logo" />
-    </Link>
+    <img src="/img/screeps/logotype.svg" alt="Screeps Logo" />
+    <Link to="/">Tools</Link>
     <Link to="/building-planner">Building Planner</Link>
     <Link to="/creep-designer">Creep Designer</Link>
   </HeaderBar>

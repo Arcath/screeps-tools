@@ -24,11 +24,16 @@ const Room = styled.div`
     box-sizing:border-box;
     border:1px solid #000;
     line-height:calc((95vh - 100px) / 50);
+    cursor:pointer;
 
     &:hover{
       border:1px solid #fff;
     }
   }
+`
+
+const Controls = styled.div`
+  background-color:#222;
 `
 
 
@@ -146,6 +151,30 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
     return structure
   }
 
+  const isRoad = (x: number, y: number): boolean => {
+    if(buildings['road']){
+      const roads = buildings['road'].filter((pos) => {
+        return (pos[0] === x && pos[1] === y)
+      })
+
+      return roads.length > 0
+    }
+
+    return false
+  }
+
+  const isRampart = (x: number, y: number): boolean => {
+    if(buildings['rampart']){
+      const ramparts = buildings['rampart'].filter((pos) => {
+        return (pos[0] === x && pos[1] === y)
+      })
+
+      return ramparts.length > 0
+    }
+
+    return false
+  }
+
   const createJSON = () => {
     const json: any = {}
 
@@ -161,6 +190,7 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
   const cellStyle = (x: number, y: number, tile: number): CSSProperties => {
     let backgroundImage
     let backgroundColor = '#222'
+    let borderColor = '#000'
 
     const structure = structureAt(x, y)
 
@@ -180,10 +210,21 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
         break
     }
 
+    if(isRoad(x, y) && tile !== 1){
+      backgroundColor = '#636363'
+    }
+
+    if(isRampart(x, y)){
+      borderColor = '#2f3a30'
+    }
+
     return {
       backgroundImage,
       backgroundSize: 'contain',
-      backgroundColor
+      backgroundPosition: 'middle',
+      backgroundRepeat: 'no-repeat',
+      backgroundColor,
+      borderColor
     }
   }
 
@@ -209,7 +250,6 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
       {[...Array(50)].map((x: number, j) => {
         return [...Array(50)].map((y: number, i) => {
           const terrainTile = parseInt(terrain.substr((j * 50) + i, 1))
-          console.log(terrainTile)
 
           return <div key={`${i}-${j}`} 
           onMouseEnter={() => {
@@ -228,7 +268,7 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
         })
       })}
     </Room>
-    <div>
+    <Controls>
       <p>
         <input type="text" value={roomName} onChange={(e) => setRoomName(e.target.value)} />
         <select value={shard} onChange={(e) => setShard(e.target.value)}>
@@ -265,7 +305,7 @@ export const BuildingPlanner: React.FC<{path: string}> = () => {
       </table>
       <textarea value={asJson} />
       <button onClick={() => createJSON()}>Generate</button>
-    </div>
+    </Controls>
     <div />
   </BPLayout>
 }

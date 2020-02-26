@@ -30,7 +30,11 @@ const Box = styled.div`
 `
 
 const SummaryTable = styled.table`
-  width:100%;
+  width:100% !important;
+`
+
+const Method = styled.li<{active: boolean}>`
+  color:${({active}) => active ? '#27ae60' : '#c0392b'}
 `
 
 const RCL_ENERGY: {[level: number]: number} = {
@@ -263,6 +267,28 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
           </tr>
         </tbody>
       </SummaryTable>
+      <h3>Creep Methods</h3>
+      <ul>
+        <Method active={body.attack > 0}>attack</Method>
+        <Method active={body.claim > 0}>attackController</Method>
+        <Method active={body.carry > 0 && body.work > 0}>build</Method>
+        <Method active={body.claim > 0}>claimController</Method>
+        <Method active={body.work > 0}>dismantle</Method>
+        <Method active={body.carry > 0}>drop</Method>
+        <Method active={body.carry > 20}>generateSafeMode</Method>
+        <Method active={body.work > 0}>harvest</Method>
+        <Method active={body.heal > 0}>heal</Method>
+        <Method active={body.move > 0}>move</Method>
+        <Method active={body.carry > 0}>pickup</Method>
+        <Method active={body.ranged_attack > 0}>rangedAttack</Method>
+        <Method active={body.heal > 0}>rangedHeal</Method>
+        <Method active={body.ranged_attack > 0}>rangedMassAttack</Method>
+        <Method active={body.carry > 0 && body.work > 0}>repair</Method>
+        <Method active={body.claim > 0}>reserveController</Method>
+        <Method active={body.carry > 0}>transfer</Method>
+        <Method active={body.carry > 0 && body.work > 0}>upgradeController</Method>
+        <Method active={body.carry > 0}>withdraw</Method>
+      </ul>
     </Box>
   </CDLayout>
 }
