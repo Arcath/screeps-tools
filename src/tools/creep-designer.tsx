@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import styled from '@emotion/styled'
 
 import {Creep} from '../components/creep'
@@ -17,6 +17,15 @@ const Box = styled.div`
   table{
     width:75%;
     float:left;
+
+    input{
+      width:50px;
+      text-align:right;
+      color:#ffe56d;
+      background-color:rgba(0,0,0,0);
+      border:none;
+      padding-right:5px;
+    }
 
     textarea{
       width:100%;
@@ -59,7 +68,7 @@ const BODYPART_COST = {
   claim: 600
 }
 
-const BODYPARTS = {
+export const BODYPARTS = {
   move: "MOVE",
   work: "WORK",
   attack: "ATTACK",
@@ -75,7 +84,6 @@ const ACTIONS = {
   build: {action: 'Build', standard: 5, boost: [1.5,1.8,2], part: 'work', background: '#ffe56d', color: '#444'},
   dismantle: {action: 'Dismantle', standard: 50, boost: [2,3,4], part: 'work', background: '#ffe56d', color: '#444'},
   harvestEnergy: {action: 'Harvest (Energy)', standard: 2, boost: [3,5,7], part: 'work', background: '#ffe56d', color: '#444'},
-  // TODO Ticks to Harvest Energy
   harvestMineral: {action: 'Harvest (Mineral)', standard: 1, boost: [3,5,7], part: 'work', background: '#ffe56d', color: '#444'},
   heal: {action: 'Heal', standard: 12, boost: [2,3,4], part: 'heal', background: '#65fd62', color: '#444'},
   ra1: {action: 'Ranged 3', standard: 1, boost: [2,3,4], part: 'ranged_attack', background: '#5d7fb2', color: '#fff'},
@@ -86,7 +94,7 @@ const ACTIONS = {
   upgradeController: {action: 'Upgrade Controller', standard: 1, boost: [1.5,1.8,2], part: 'work', background: '#ffe56d', color: '#444'}
 }
 
-const PART_CONSTANTS = (Object.keys(BODYPARTS) as (keyof typeof BODYPARTS)[])
+export const PART_CONSTANTS = (Object.keys(BODYPARTS) as (keyof typeof BODYPARTS)[])
 const ACTION_CONSTANTS = (Object.keys(ACTIONS) as (keyof typeof ACTIONS)[])
 
 export const CreepDesigner: React.FC<{path: string}> = () => {
@@ -101,10 +109,30 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
     carry: 0
   })
 
+  useEffect(() => {
+    const importable = getQueryVariable('share')
+    if(typeof importable === 'string'){
+      const counts = importable.split('-').map((count) => parseInt(count, 10))
+
+      setBody({
+        move: counts[0],
+        work: counts[1],
+        attack: counts[2],
+        ranged_attack: counts[3],
+        tough: counts[4],
+        heal: counts[5],
+        claim: counts[6],
+        carry: counts[7]
+      })
+    }
+  }, [])
+
   const add = (bodypart: keyof typeof BODYPARTS) => {
-    const newBody = {...body}
-    newBody[bodypart] = body[bodypart] + 1
-    setBody(newBody)
+    if(partCount() < 50){
+      const newBody = {...body}
+      newBody[bodypart] = body[bodypart] + 1
+      setBody(newBody)
+    }
   }
 
   const remove = (bodypart: keyof typeof BODYPARTS) => {
@@ -164,6 +192,12 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
     return rcl
   }
 
+  const shareLink = () => {
+    const counts = PART_CONSTANTS.map((part) => body[part]).join('-')
+
+    return `/creep-designer?share=${counts}`
+  }
+
   return <CDLayout>
     <Box>
       <table>
@@ -181,7 +215,11 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
               <td>{BODYPART_COST[part]}</td>
               <td>
                 <button onClick={() => remove(part)}>Remove</button>
-                <input type="number" value={body[part]} onChange={(e) => {
+                <input 
+                type="number"
+                value={body[part]}
+                max={50 - partCount() + body[part]}
+                onChange={(e) => {
                   set(part, parseInt(e.target.value))
                 }} />
                 <button onClick={() => add(part)}>Add</button></td>
@@ -198,6 +236,7 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
             <td>Body</td>
             <td colSpan={2}>
               <textarea value={parts()} />
+              <a href={shareLink()}>Shareable Link</a>
             </td>
           </tr>
         </tfoot>
@@ -261,6 +300,14 @@ export const CreepDesigner: React.FC<{path: string}> = () => {
             <td>{((partCount() - body.carry) / ((body.move * 2) * 4)).toLocaleString()}</td>
             <td></td>
           </tr>
+          <tr style={{backgroundColor: '#ffe56d', color: '#444'}}>
+            <td>Ticks to Drain Source</td>
+            <td>{(3000 / (body.work * 2)).toLocaleString()}</td>
+            <td>{(3000 / ((body.work * 2) * 3)).toLocaleString()}</td>
+            <td>{(3000 / ((body.work * 2) * 5)).toLocaleString()}</td>
+            <td>{(3000 / ((body.work * 2) * 7)).toLocaleString()}</td>
+            <td></td>
+          </tr>
           <tr>
             <td>Health</td>
             <td colSpan={5}>{(partCount() * 100).toLocaleString()} ({(body.tough * 100).toLocaleString()} from TOUGH)</td>
@@ -320,9 +367,23 @@ const ActionRow: React.FC<{
   }>
     <td>{action}</td>
     <td>{rate}/T</td>
-    <td>{rate * boost[0]}/T</td>
-    <td>{rate * boost[1]}/T</td>
-    <td>{rate * boost[2]}/T</td>
-    <td>{rate * lifespan}</td>
+    <td>{(rate * boost[0]).toLocaleString()}/T</td>
+    <td>{(rate * boost[1]).toLocaleString()}/T</td>
+    <td>{(rate * boost[2]).toLocaleString()}/T</td>
+    <td>{(rate * lifespan).toLocaleString()}</td>
   </tr>
+}
+
+const getQueryVariable = (variable: string) => {
+  const query = window.location.search.substring(1)
+  const vars = query.split("&")
+  return vars.reduce<boolean | string>((r, v) => {
+    const pair = v.split('=')
+
+    if(pair[0] === variable){
+      return pair[1]
+    }
+
+    return r
+  }, false)
 }

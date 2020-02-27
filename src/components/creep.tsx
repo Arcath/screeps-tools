@@ -1,7 +1,7 @@
 import React from 'react'
 
 export const Creep: React.FC<{body: {[part: string]: number}}> = ({body}) => (
-  <svg width="200" height="200">
+  <svg width="200" height="200" style={{backgroundColor: '#222222'}}>
     {/* TOUGH */}
     <circle cx={100} cy={100} r={65} fill="#525252" opacity={body.tough > 0 ? body.tough / 50 : 0 } />
 
