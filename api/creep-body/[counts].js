@@ -1,12 +1,11 @@
-import {NowRequest, NowResponse} from '@now/node'
 import ReactDOMServer from 'react-dom/server'
 import React from 'react'
 import svg2img from 'svg2img'
 
 import {Creep} from '../../src/components/creep'
 
-export default (req: NowRequest, res: NowResponse) => {
-  const counts = (req.query.counts as string).split('-').map((count) => parseInt(count, 10))
+export default (req, res) => {
+  const counts = req.query.counts.split('-').map((count) => parseInt(count, 10))
 
   const body = {
     move: counts[0],
