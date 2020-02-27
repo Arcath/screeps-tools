@@ -1,6 +1,7 @@
 import {NowRequest, NowResponse} from '@now/node'
 import ReactDOMServer from 'react-dom/server'
 import React from 'react'
+import svg2img from 'svg2img'
 
 import {Creep} from '../../src/components/creep'
 
@@ -18,5 +19,9 @@ export default (req: NowRequest, res: NowResponse) => {
     carry: counts[7]
   }
 
-  res.send(ReactDOMServer.renderToString(React.createElement(Creep, {body})))
+  const svg = ReactDOMServer.renderToString(React.createElement(Creep, {body}))
+
+  svg2img(svg, (err, buffer) => {
+    res.send(buffer)
+  })
 }

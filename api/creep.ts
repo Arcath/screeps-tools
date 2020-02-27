@@ -26,7 +26,7 @@ export default (req: NowRequest, res: NowResponse) => {
         },
         "accessory": {
           "type": "image",
-          "image_url": `https://screeps.arcath.net/api/creep-body/${counts}.svg`,
+          "image_url": `https://screeps.arcath.net/api/creep-body/${counts}.png`,
           "alt_text": counts
         }
       },
