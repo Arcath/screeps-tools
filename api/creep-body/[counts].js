@@ -21,6 +21,7 @@ export default (req, res) => {
   const svg = ReactDOMServer.renderToString(React.createElement(Creep, {body}))
 
   svg2img(svg, (err, buffer) => {
+    res.contentType('image/png')
     res.send(buffer)
   })
 }
